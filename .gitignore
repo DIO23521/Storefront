@@ -1,0 +1,20 @@
+# Временные файлы Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# База данных (у каждого разработчика своя)
+db.sqlite3
+
+# Настройки VS Code
+.vscode/
+
+# Файлы окружения
+.env
+.venv/
+env/
+venv/
+ENV/
+
+# Логи
+*.log
