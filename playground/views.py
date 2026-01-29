@@ -1,22 +1,25 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from store.models import Product
 
 # Create your views here.
 # request -> response
 # request handler (action)
 
 
-def calculate():
-    x = 1
-    y = 2
-    return x
 # pull data from a database
 # transfom data
 # send emails 
 # e.t.c
 #       ⬇️
 def say_hi(request):
-    x = calculate() # всегда убирать брейкпоинты
+    query_set = Product.objects.all()
+
+# query_set.filter().filter().order_by() <-- complex query
+
+    for product in query_set:
+        print(product)
+
     return render(request, 'hello.html', {'name': 'Dima'})
 
 
