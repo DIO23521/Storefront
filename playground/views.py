@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Q
+from django.db.models import Q, F
 from store.models import Product
 from store.models import Customer
 from store.models import Collection
@@ -29,7 +29,9 @@ def say_hi(request):
 
 #    queryset5 = OrderItem.objects.filter(product__collection__id=3) <-- искать в в
 
-    queryset = Product.objects.filter(Q(inventory__lt=10) & ~Q(unit_price__lt=20))
+#    queryset = Product.objects.filter(Q(inventory__lt=10) & ~Q(unit_price__lt=20))
+    
+    queryset = Product.objects.filter(inventory=F('unit_price'))
 
 #    for product in query_set:
 #        print(product)
