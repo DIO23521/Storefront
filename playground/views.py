@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q
 from store.models import Product
 from store.models import Customer
 from store.models import Collection
@@ -26,15 +27,13 @@ def say_hi(request):
 #    product = Product.objects.filter(pk=0).first()       *<-- ways to retreat data
 #    exists = Product.objects.filter(pk=0).exists()
 
-    queryset = Customer.objects.filter(email__icontains='.com')
-    queryset2 = Collection.objects.filter(featured_product__isnull=True)
-    queryset3 = Product.objects.filter(inventory__lt=(10))
-    queryset4 = Order.objects.filter(customer__id=1)
-    queryset5 = OrderItem.objects.filter(product__collection__id=3)
+#    queryset5 = OrderItem.objects.filter(product__collection__id=3) <-- искать в в
+
+    queryset = Product.objects.filter(Q(inventory__lt=10) & ~Q(unit_price__lt=20))
 
 #    for product in query_set:
 #        print(product)
 
-    return render(request, 'hello.html', {'name': 'Dima', 'customers': list(queryset),'collection': list(queryset2) ,'products': list(queryset3), 'orders': list(queryset4), 'orderitems': list(queryset5)})
+    return render(request, 'hello.html', {'name': 'Dima','products': list(queryset)})
 
 #
