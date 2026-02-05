@@ -31,11 +31,12 @@ def say_hi(request):
 
 #    queryset = Product.objects.filter(Q(inventory__lt=10) & ~Q(unit_price__lt=20))
     
-    queryset = Product.objects.filter(inventory=F('unit_price'))
+    product = Product.objects.order_by('unit_price')[0]
+#    product = Product.objects.earliest/latest('unit_price')
 
 #    for product in query_set:
 #        print(product)
 
-    return render(request, 'hello.html', {'name': 'Dima','products': list(queryset)})
+    return render(request, 'hello.html', {'name': 'Dima','product': product})
 
 #
