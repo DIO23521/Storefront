@@ -31,8 +31,7 @@ def say_hi(request):
 
 #    queryset = Product.objects.filter(Q(inventory__lt=10) & ~Q(unit_price__lt=20))
     
-    queryset = Product.objects.all()[5:10]
-#    product = Product.objects.earliest/latest('unit_price')
+    queryset = Product.objects.filter(id__in=OrderItem.objects.values('product_id').distinct()).order_by('title')
 
 #    for product in query_set:
 #        print(product)
