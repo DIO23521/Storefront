@@ -31,11 +31,12 @@ def say_hi(request):
 
 #    queryset = Product.objects.filter(Q(inventory__lt=10) & ~Q(unit_price__lt=20))
     
-    queryset = Product.objects.filter(id__in=OrderItem.objects.values('product_id').distinct()).order_by('title')
+#    queryset = Product.objects.filter(id__in=OrderItem.objects.values('product_id').distinct()).order_by('title')
 
+    queryset = Order.objects.select_related('customer').prefetch_related('orderitem_set__product').order_by('-placed_at')[:5]
 #    for product in query_set:
 #        print(product)
 
-    return render(request, 'hello.html', {'name': 'Dima','products': list(queryset)})
+    return render(request, 'hello.html', {'name': 'Dima','orders': list(queryset)})
 
 #
