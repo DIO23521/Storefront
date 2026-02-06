@@ -1,13 +1,16 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Q, F
-from django.db.models.aggregates import Count, Max, Min, Avg, Sum
+from django.contrib.contenttypes.models import ContentType
+from django.db.models import Q, F, Value, Func, Count, ExpressionWrapper, DecimalField
+from django.db.models.aggregates import Max, Min, Avg, Sum
+from django.db.models.functions import Concat
 from store.models import Product
 from store.models import Customer
 from store.models import Collection
 from store.models import Order
 from store.models import OrderItem  
+from tags.models import TaggedItem
 
 
 # Create your views here.
@@ -38,11 +41,15 @@ def say_hi(request):
 
 #    result = Product.objects.aggregate(count=Count('id'), min_price=Min('unit_price'))
 
-#    result = Order.objects.aggregate(count=Count('id'))
-#4    result = Product.objects.filter(collection__id=3).aggregate(max_price=Max('unit_price'), min_price=Min('unit_price'), avarage_price=Avg('unit_price'))
-#    result = OrderItem.objects.filter(product__id=1).aggregate(units_sold=Sum('quantity'))
-    result = Order.objects.filter(customer__id=1).aggregate(count=Count('id'))
+#    queryset = Customer.objects.annotate(new_id=F('id') + 1)
 
-    return render(request, 'hello.html', {'name': 'Dima','result': result})
+#    queryset = Customer.objects.annotate(full_name=Func(F('first_name'), Value(' '), F('last_name'), function='CONCAT'))
+
+#    discounted_price = ExpressionWrapper(F('unit_price') * 0.8, output_field=DecimalField())
+#    queryset = Product.objects.annotate(discounted_price=discounted_price)
+
+    queryset = TaggedItem.objects.get_for_model(Product, 1)
+    
+    return render(request, 'hello.html', {'name': 'Dima','result': list(queryset)})
 
 #
