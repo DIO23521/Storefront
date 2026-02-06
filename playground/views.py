@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q, F
+from django.db.models.aggregates import Count, Max, Min, Avg, Sum
 from store.models import Product
 from store.models import Customer
 from store.models import Collection
@@ -33,10 +34,15 @@ def say_hi(request):
     
 #    queryset = Product.objects.filter(id__in=OrderItem.objects.values('product_id').distinct()).order_by('title')
 
-    queryset = Order.objects.select_related('customer').prefetch_related('orderitem_set__product').order_by('-placed_at')[:5]
-#    for product in query_set:
-#        print(product)
+#    queryset = Order.objects.select_related('customer').prefetch_related('orderitem_set__product').order_by('-placed_at')[:5]
 
-    return render(request, 'hello.html', {'name': 'Dima','orders': list(queryset)})
+#    result = Product.objects.aggregate(count=Count('id'), min_price=Min('unit_price'))
+
+#    result = Order.objects.aggregate(count=Count('id'))
+#4    result = Product.objects.filter(collection__id=3).aggregate(max_price=Max('unit_price'), min_price=Min('unit_price'), avarage_price=Avg('unit_price'))
+#    result = OrderItem.objects.filter(product__id=1).aggregate(units_sold=Sum('quantity'))
+    result = Order.objects.filter(customer__id=1).aggregate(count=Count('id'))
+
+    return render(request, 'hello.html', {'name': 'Dima','result': result})
 
 #
