@@ -5,11 +5,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q, F, Value, Func, Count, ExpressionWrapper, DecimalField
 from django.db.models.aggregates import Max, Min, Avg, Sum
 from django.db.models.functions import Concat
-from store.models import Product
-from store.models import Customer
-from store.models import Collection
-from store.models import Order
-from store.models import OrderItem  
+from django.db import transaction
+from store.models import Product, Cart, CartItem, Customer,Collection, Order, OrderItem 
 from tags.models import TaggedItem
 
 
@@ -48,8 +45,21 @@ def say_hi(request):
 #    discounted_price = ExpressionWrapper(F('unit_price') * 0.8, output_field=DecimalField())
 #    queryset = Product.objects.annotate(discounted_price=discounted_price)
 
-    queryset = TaggedItem.objects.get_for_model(Product, 1)
-    
-    return render(request, 'hello.html', {'name': 'Dima','result': list(queryset)})
+    #collection = Collection()
+    #collection.title = 'Shopping Cart'
+    #collection.featured_product = Product(pk=1)
+    #collection.save()
+    with transaction.atomic():
+        order = Order()
+        order.customer_id = 1
+        order.save()
 
-#
+        item = OrderItem()
+        item.order = order
+        item.product_id = 1
+        item.quantity = 1
+        item.unit_price = 10
+        item.save()
+
+    return render(request, 'hello.html', {'name': 'Dima'})
+

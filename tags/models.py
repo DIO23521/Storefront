@@ -4,24 +4,14 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 
 
 # Create your models here.
-class TaggedItemManager(models.manager):
-    def get_for_model(self, obj_type, obj_id):
-        content_type = ContentType.objects.get_for_model(obj_type)
 
-
-        return TaggedItem.objects \
-            .select_related('tag') \
-            .filter(
-                content_type=content_type,
-                object_id=obj_id
-            )
 
 class Tag(models.Model):
     lable = models.CharField(max_length=255)
 
 
 class TaggedItem(models.Model):
-    objects = TaggedItemManager()
+
     tag = models.ForeignKey(Tag, on_delete=models.CASCADE,)
     # type (product, video, article)
     # ID
