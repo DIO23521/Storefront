@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'django.contrib.admin', # admin interface for managing data
+    'django.contrib.sessions',
     'django.contrib.auth', # for authenticate users
     'django.contrib.contenttypes', # 
     'django.contrib.messages',  # one time messages for users
