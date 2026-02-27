@@ -40,8 +40,9 @@ INSTALLED_APPS = [
     'playground', # запятая в конце обязательно
     'debug_toolbar',
     'store',
+    'store_custom',
     'tags',
-    'likes',
+    'likes',    
 ]
 
 MIDDLEWARE = [

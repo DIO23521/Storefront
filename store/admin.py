@@ -1,7 +1,10 @@
 from django.contrib import admin, messages
+from django.contrib.contenttypes.admin import GenericTabularInline
 from django.db.models import Count, QuerySet
 from django.utils.html import format_html, urlencode
 from django.urls import reverse
+
+from tags.models import TaggedItem
 from . import models
 
 
@@ -42,6 +45,9 @@ class OrderAdmin(admin.ModelAdmin):
 class ProductAdmin(admin.ModelAdmin):
     autocomplete_fields = ['collection']
     actions = ['clear_inventory']
+    prepopulated_fields = {
+        'slug': ['title']
+    }
     list_display = ['title', 'unit_price', 'inventory_status', 'collection_title']
     list_editable = ['unit_price']
     list_filter = ['collection', 'last_update', InventoryFilter]
