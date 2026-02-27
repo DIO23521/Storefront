@@ -22,9 +22,18 @@ class InventoryFilter(admin.SimpleListFilter):
             return queryset.filter(inventory__lt=10)
 
 
+class OrderItemInLine(admin.TabularInline):
+    autocomplete_fields = ['product']
+    model = models.OrderItem
+    min_num = 1
+    max_num = 10
+    extra = 0
+   
+
 @admin.register(models.Order)
-class OrderItemAdmin(admin.ModelAdmin):
+class OrderAdmin(admin.ModelAdmin):
     autocomplete_fields = ['customer']
+    inlines = [OrderItemInLine]
     list_display = ['id', 'placed_at', 'customer']
 
 
@@ -38,6 +47,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_filter = ['collection', 'last_update', InventoryFilter]
     list_per_page = 10
     list_select_related = ['collection']
+    search_fields = ['title']
 
     def collection_title(self, product):
         return product.collection.title
